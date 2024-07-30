@@ -151,27 +151,39 @@ const Header = () =>{
   useEffect(()=>{
     const allIds =[];
     cartData.filter((item)=>{
-        allIds.push(item.id, item.quentity)
+        allIds.push(item.id)
     })
 
     
     axios.get('https://dummyjson.com/products?limit=194')
     .then((response)=>{
      
-    const cartProducts = response.data.products.filter((item)=> allIds.includes(item.id, item.quentity))
-    const finalCart = cartProduct.map((item)=> {
-      cartData.forEach((cart)=>{
-        if(cart.id === item.id){
-          setCartProduct([...cartProduct,{...item, quentity: cart.quentity}]);
+    const cartProducts = response.data.products.filter((item)=> allIds.includes(item.id, item.quentity));
 
-          console.log([...cartProduct,{...item, quentity: cart.quentity}])
-          }
-      })
-    })
+    cartProducts.forEach((item,in1)=>{
+      cartData.forEach((cartIn, in2)=>{
+        if(item.id === cartIn.id){
+          cartProducts[in1].quantity = cartData[in2].quentity
+        }
+      });
+
+      setCartProduct(cartProducts);
+
+    });
+
+   
+    // const finalCart = cartProduct.map((item)=> {
+    //   cartData.forEach((cart)=>{
+    //     if(cart.id === item.id){
+    //       setCartProduct([...cartProduct,{...item, quentity: cart.quentity}]);
+
+    //       console.log([...cartProduct,{...item, quentity: cart.quentity}]);
+    //       }
+    //   })
+    // })
     
     })
 
-    console.log(cartProduct)
   },[cardPosition]);
 
   return (
@@ -212,7 +224,7 @@ const Header = () =>{
                         </td>
                       <td className='border-collapse border'>{cartD.price}</td>
                       <td className='border-collapse border'>-</td>
-                      <td className='border-collapse border'>{cartD.quentity}</td>
+                      <td className='border-collapse border'>{cartD.quantity}</td>
                       <td className='border-collapse border'>+</td>
                       <td className='border-collapse border'>Total</td>
                     </tr>
